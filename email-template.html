@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Template EmailJS — Cristal Net Lorraine</title>
+  <!--
+    USAGE : Copier le contenu entre les balises <body> dans l'éditeur HTML d'EmailJS.
+    Le logo utilise l'URL absolue du site. Remplacer le domaine si nécessaire.
+    Variables EmailJS utilisées : {{from_name}} {{from_email}} {{phone}} {{service}} {{message}}
+  -->
+</head>
+<body style="margin:0;padding:0;background:#f0f0f0;">
+
+<div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;color:#12264F;">
+
+  <!-- Logo -->
+  <div style="background-color:#ffffff;padding:24px 32px;text-align:center;border-bottom:3px solid #1A8BC2;">
+    <img
+      src="https://i.goopics.net/oc0664.png"
+      alt="Cristal Net Lorraine"
+      width="220"
+      style="max-width:220px;height:auto;display:block;margin:0 auto;"
+    />
+  </div>
+
+  <!-- Titre -->
+  <div style="background-color:#12264F;padding:14px 32px;text-align:center;">
+    <p style="color:#5DB8E0;margin:0;font-size:13px;font-weight:bold;letter-spacing:0.08em;text-transform:uppercase;">
+      Nouvelle demande de devis
+    </p>
+  </div>
+
+  <!-- Corps -->
+  <div style="padding:32px;background-color:#f9f9f9;border:1px solid #e0e0e0;border-top:none;">
+
+    <table style="width:100%;border-collapse:collapse;font-size:15px;">
+      <tr>
+        <td style="padding:10px 0;border-bottom:1px solid #e8e8e8;width:38%;color:#666;font-weight:bold;">Nom</td>
+        <td style="padding:10px 0;border-bottom:1px solid #e8e8e8;">{{from_name}}</td>
+      </tr>
+      <tr>
+        <td style="padding:10px 0;border-bottom:1px solid #e8e8e8;color:#666;font-weight:bold;">Email</td>
+        <td style="padding:10px 0;border-bottom:1px solid #e8e8e8;">
+          <a href="mailto:{{from_email}}" style="color:#1A8BC2;text-decoration:none;">{{from_email}}</a>
+        </td>
+      </tr>
+      <tr>
+        <td style="padding:10px 0;border-bottom:1px solid #e8e8e8;color:#666;font-weight:bold;">Téléphone</td>
+        <td style="padding:10px 0;border-bottom:1px solid #e8e8e8;">{{phone}}</td>
+      </tr>
+      <tr>
+        <td style="padding:10px 0;border-bottom:1px solid #e8e8e8;color:#666;font-weight:bold;">Service demandé</td>
+        <td style="padding:10px 0;border-bottom:1px solid #e8e8e8;">{{service}}</td>
+      </tr>
+    </table>
+
+    <div style="margin-top:24px;">
+      <p style="color:#666;font-weight:bold;margin:0 0 8px;">Message :</p>
+      <div style="background:#ffffff;border-left:4px solid #1A8BC2;padding:16px;border-radius:4px;font-size:15px;line-height:1.6;">
+        {{message}}
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <div style="padding:16px 32px;background-color:#12264F;text-align:center;">
+    <p style="color:#5DB8E0;font-size:12px;margin:0;">
+      Message envoyé depuis le formulaire de contact de
+      <strong style="color:#ffffff;">cristalnetlorraine.fr</strong>
+    </p>
+  </div>
+
+</div>
+
+</body>
+</html>

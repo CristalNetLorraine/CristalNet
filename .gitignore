@@ -1,0 +1,24 @@
+# Credentials EmailJS — ne jamais committer
+js/config.js
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+
+# Éditeurs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+npm-debug.log*
+
+# Node (si utilisé un jour)
+node_modules/

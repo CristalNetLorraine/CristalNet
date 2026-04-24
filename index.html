@@ -1,0 +1,2056 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cristal Net — Nettoyage de vitres & panneaux solaires dans les Vosges</title>
+  <style>
+    /* ── Fonts ─────────────────────────────────────────────── */
+    @font-face {
+      font-family: 'Big Shoulders';
+      src: url('fonts/Big_Shoulders/BigShoulders-VariableFont_opsz,wght.ttf') format('truetype');
+      font-weight: 100 900;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'Nunito';
+      src: url('fonts/Nunito/Nunito-VariableFont_wght.ttf') format('truetype');
+      font-weight: 200 900;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'Nunito';
+      src: url('fonts/Nunito/Nunito-Italic-VariableFont_wght.ttf') format('truetype');
+      font-weight: 200 900;
+      font-style: italic;
+    }
+
+    /* ── Tokens ────────────────────────────────────────────── */
+    :root {
+      --navy:    #12264F;
+      --blue:    #1A8BC2;
+      --blue-lt: #5DB8E0;
+      --ice:     #E8F5FB;
+      --canvas:  #FBFBFA;
+      --surface: #FFFFFF;
+      --border:  rgba(0,0,0,0.07);
+      --text:    #1C1C1C;
+      --muted:   #6B7280;
+      --font-head: 'Big Shoulders', 'Helvetica Neue', sans-serif;
+      --font-body: 'Nunito', 'Helvetica Neue', sans-serif;
+    }
+
+    /* ── Reset ─────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.65;
+      color: var(--text);
+      background: var(--canvas);
+      -webkit-font-smoothing: antialiased;
+    }
+    img { display: block; max-width: 100%; }
+    a { color: inherit; text-decoration: none; }
+
+    /* ── Utilities ─────────────────────────────────────────── */
+    .container {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 0 32px;
+    }
+    .tag {
+      display: inline-block;
+      font-family: var(--font-body);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      background: var(--ice);
+      color: var(--blue);
+    }
+
+    /* ── Scroll reveal ─────────────────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(14px);
+      transition: opacity 0.6s cubic-bezier(0.16,1,0.3,1),
+                  transform 0.6s cubic-bezier(0.16,1,0.3,1);
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* ── Ambient blob ──────────────────────────────────────── */
+    .ambient {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background: radial-gradient(ellipse 60% 50% at 80% 20%, rgba(26,139,194,0.04) 0%, transparent 70%),
+                  radial-gradient(ellipse 40% 40% at 10% 80%, rgba(18,38,79,0.03) 0%, transparent 70%);
+      animation: blobDrift 25s ease-in-out infinite alternate;
+    }
+    @keyframes blobDrift {
+      from { transform: scale(1) translateX(0); }
+      to   { transform: scale(1.04) translateX(20px); }
+    }
+
+    /* ── Nav ───────────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: rgba(251,251,250,0.88);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 88px;
+    }
+    .nav-logo img { height: 72px; width: auto; }
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--muted);
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--navy); }
+    .nav-cta {
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 700;
+      padding: 9px 20px;
+      background: var(--navy);
+      color: #fff;
+      border-radius: 5px;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .nav-cta:hover { background: #1c3672; }
+    .nav-cta:active { transform: scale(0.98); }
+
+    /* ── Hero ──────────────────────────────────────────────── */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding-top: 88px;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+    .hero-bg img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.14;
+      filter: saturate(0.6);
+    }
+    .hero-bg::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(251,251,250,0.95) 40%, rgba(232,245,251,0.7) 100%);
+    }
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 680px;
+    }
+    .hero-eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+    .hero-eyebrow-line {
+      width: 32px;
+      height: 2px;
+      background: var(--blue);
+    }
+    .hero-eyebrow span {
+      font-family: var(--font-body);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--blue);
+    }
+    .hero h1 {
+      font-family: var(--font-head);
+      font-size: clamp(56px, 8vw, 92px);
+      font-weight: 800;
+      line-height: 1.0;
+      letter-spacing: -0.01em;
+      color: var(--navy);
+      margin-bottom: 24px;
+    }
+    .hero h1 em {
+      font-style: normal;
+      color: var(--blue);
+    }
+    .hero-sub {
+      font-size: 18px;
+      font-weight: 400;
+      color: var(--muted);
+      max-width: 480px;
+      margin-bottom: 40px;
+      line-height: 1.6;
+    }
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .btn-primary {
+      font-family: var(--font-body);
+      font-weight: 700;
+      font-size: 15px;
+      padding: 14px 28px;
+      background: var(--navy);
+      color: #fff;
+      border-radius: 5px;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .btn-primary:hover { background: #1c3672; }
+    .btn-primary:active { transform: scale(0.98); }
+    .btn-ghost {
+      font-family: var(--font-body);
+      font-weight: 600;
+      font-size: 15px;
+      color: var(--navy);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: gap 0.2s;
+    }
+    .btn-ghost:hover { gap: 10px; }
+    .btn-ghost svg { flex-shrink: 0; }
+
+    .hero-stats {
+      display: flex;
+      gap: 40px;
+      margin-top: 56px;
+      padding-top: 40px;
+      border-top: 1px solid var(--border);
+    }
+    .stat-val {
+      font-family: var(--font-head);
+      font-size: 36px;
+      font-weight: 800;
+      color: var(--navy);
+      line-height: 1;
+    }
+    .stat-val span { color: var(--blue); }
+    .stat-label {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    /* ── Services ──────────────────────────────────────────── */
+    .section { padding: 120px 0; }
+    .section-head {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 64px;
+    }
+    .section-head h2 {
+      font-family: var(--font-head);
+      font-size: clamp(38px, 5vw, 60px);
+      font-weight: 800;
+      color: var(--navy);
+      line-height: 1.05;
+      letter-spacing: -0.01em;
+    }
+    .section-head p {
+      font-size: 17px;
+      color: var(--muted);
+      max-width: 520px;
+      line-height: 1.6;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    .service-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+    .service-card:hover {
+      box-shadow: 0 4px 16px rgba(0,0,0,0.05);
+      transform: translateY(-2px);
+    }
+    .service-card-img {
+      width: 100%;
+      height: 260px;
+      object-fit: cover;
+      filter: saturate(0.85);
+      transition: filter 0.3s, transform 0.4s;
+    }
+    .service-card:hover .service-card-img {
+      filter: saturate(1);
+      transform: scale(1.02);
+    }
+    .service-card-img-wrap {
+      overflow: hidden;
+    }
+    .service-card-body {
+      padding: 28px 32px 32px;
+    }
+    .service-icon {
+      width: 40px;
+      height: 40px;
+      background: var(--ice);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+    }
+    .service-icon svg { color: var(--blue); }
+    .service-card h3 {
+      font-family: var(--font-head);
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--navy);
+      margin-bottom: 10px;
+      letter-spacing: -0.01em;
+    }
+    .service-card p {
+      font-size: 15px;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+    .service-list {
+      list-style: none;
+      margin-top: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .service-list li {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .service-list li::before {
+      content: '';
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--blue);
+      flex-shrink: 0;
+    }
+
+    /* ── Gallery ───────────────────────────────────────────── */
+    .gallery-section { padding: 120px 0; background: var(--surface); }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: 240px 240px;
+      gap: 12px;
+    }
+    .gallery-item {
+      overflow: hidden;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+    }
+    .gallery-item:nth-child(1) { grid-column: span 2; }
+    .gallery-item:nth-child(5) { grid-column: span 2; }
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: saturate(0.8);
+      transition: transform 0.5s cubic-bezier(0.16,1,0.3,1), filter 0.3s;
+    }
+    .gallery-item:hover img {
+      transform: scale(1.04);
+      filter: saturate(1);
+    }
+
+    /* ── Why ───────────────────────────────────────────────── */
+    .why-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      background: var(--border);
+    }
+    .why-card {
+      background: var(--surface);
+      padding: 36px 32px;
+      transition: background 0.2s;
+    }
+    .why-card:hover { background: var(--ice); }
+    .why-num {
+      font-family: var(--font-head);
+      font-size: 48px;
+      font-weight: 800;
+      color: var(--blue);
+      opacity: 0.25;
+      line-height: 1;
+      margin-bottom: 16px;
+    }
+    .why-card h3 {
+      font-family: var(--font-head);
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--navy);
+      margin-bottom: 10px;
+      letter-spacing: -0.01em;
+    }
+    .why-card p {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    /* ── Zone ──────────────────────────────────────────────── */
+    .zone-section { padding: 120px 0; }
+    .zone-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+    .zone-map {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      aspect-ratio: 4/3;
+    }
+    .zone-map img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: saturate(0.5) sepia(0.15);
+    }
+    .zone-content h2 {
+      font-family: var(--font-head);
+      font-size: clamp(36px, 4vw, 56px);
+      font-weight: 800;
+      color: var(--navy);
+      line-height: 1.05;
+      letter-spacing: -0.01em;
+      margin-bottom: 20px;
+    }
+    .zone-content p {
+      font-size: 16px;
+      color: var(--muted);
+      margin-bottom: 32px;
+      line-height: 1.65;
+    }
+    .zone-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .zone-tag {
+      font-size: 13px;
+      font-weight: 600;
+      padding: 6px 14px;
+      background: var(--ice);
+      color: var(--navy);
+      border-radius: 5px;
+      border: 1px solid rgba(26,139,194,0.15);
+    }
+
+    /* ── Testimonials ──────────────────────────────────────── */
+    .testimonials-section {
+      padding: 120px 0;
+      background: var(--navy);
+      position: relative;
+      overflow: hidden;
+    }
+    .testimonials-section::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 60% 80% at 90% 50%, rgba(26,139,194,0.15) 0%, transparent 70%);
+    }
+    .testimonials-section .section-head h2 { color: #fff; }
+    .testimonials-section .section-head p { color: rgba(255,255,255,0.5); }
+    .testimonials-section .tag { background: rgba(26,139,194,0.2); color: var(--blue-lt); }
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    .testimonial-card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      padding: 32px;
+    }
+    .testimonial-stars {
+      display: flex;
+      gap: 3px;
+      margin-bottom: 16px;
+    }
+    .testimonial-stars svg { color: #F4BE00; }
+    .testimonial-card blockquote {
+      font-size: 15px;
+      color: rgba(255,255,255,0.8);
+      line-height: 1.65;
+      font-style: italic;
+      margin-bottom: 24px;
+    }
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .testimonial-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--blue);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-head);
+      font-weight: 800;
+      font-size: 14px;
+      color: #fff;
+    }
+    .testimonial-card.first-slot {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 40px 32px;
+      border: 1.5px dashed rgba(255,255,255,0.2);
+      background: rgba(255,255,255,0.03);
+      min-height: 180px;
+      cursor: default;
+    }
+    .first-slot-icon {
+      color: var(--blue-lt);
+      opacity: 0.5;
+      margin-bottom: 14px;
+    }
+    .first-slot-label {
+      font-family: var(--font-head);
+      font-size: 20px;
+      font-weight: 800;
+      color: rgba(255,255,255,0.5);
+      letter-spacing: -0.01em;
+      margin-bottom: 6px;
+    }
+    .first-slot-sub {
+      font-size: 13px;
+      color: rgba(255,255,255,0.25);
+    }
+    .first-cta {
+      margin-top: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .first-cta p {
+      font-size: 16px;
+      color: rgba(255,255,255,0.6);
+    }
+    .first-cta strong { color: rgba(255,255,255,0.9); }
+    .first-cta .btn-primary {
+      background: var(--blue);
+      white-space: nowrap;
+    }
+    .first-cta .btn-primary:hover { background: var(--blue-lt); color: var(--navy); }
+
+    .testimonial-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: #fff;
+    }
+    .testimonial-role {
+      font-size: 12px;
+      color: rgba(255,255,255,0.4);
+    }
+
+    /* ── Contact ───────────────────────────────────────────── */
+    .contact-section { padding: 120px 0; }
+    .contact-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: start;
+    }
+    .contact-info h2 {
+      font-family: var(--font-head);
+      font-size: clamp(36px, 4vw, 56px);
+      font-weight: 800;
+      color: var(--navy);
+      line-height: 1.05;
+      letter-spacing: -0.01em;
+      margin-bottom: 20px;
+    }
+    .contact-info p {
+      font-size: 16px;
+      color: var(--muted);
+      margin-bottom: 40px;
+      line-height: 1.65;
+    }
+    .contact-details {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .contact-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+    }
+    .contact-item-icon {
+      width: 38px;
+      height: 38px;
+      background: var(--ice);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .contact-item-icon svg { color: var(--blue); }
+    .contact-item-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .contact-item-value {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--navy);
+    }
+
+    .contact-form {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 40px;
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 20px;
+    }
+    .form-group label {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--navy);
+      letter-spacing: 0.02em;
+    }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      font-family: var(--font-body);
+      font-size: 15px;
+      color: var(--text);
+      background: var(--canvas);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 11px 14px;
+      outline: none;
+      transition: border-color 0.2s;
+      resize: vertical;
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: var(--blue);
+    }
+    .form-group input::placeholder,
+    .form-group textarea::placeholder { color: #bbb; }
+    .phone-input-wrap {
+      display: flex;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: var(--canvas);
+      transition: border-color 0.2s;
+    }
+    .phone-input-wrap:focus-within { border-color: var(--blue); }
+    .phone-country-picker {
+      position: relative;
+      flex-shrink: 0;
+      border-right: 1px solid var(--border);
+    }
+    .country-trigger {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--ice);
+      border: none;
+      border-radius: 5px 0 0 5px;
+      padding: 11px 10px;
+      height: 100%;
+      cursor: pointer;
+      white-space: nowrap;
+      font-family: var(--font-body);
+      font-size: 13px;
+      color: var(--text);
+      outline: none;
+    }
+    .country-trigger:focus-visible { box-shadow: inset 0 0 0 2px var(--blue); }
+    .country-chevron { color: #999; flex-shrink: 0; transition: transform 0.18s; }
+    .country-trigger[aria-expanded="true"] .country-chevron { transform: rotate(180deg); }
+    .flag-icon {
+      display: inline-flex;
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+      overflow: hidden;
+      border-radius: 50%;
+      box-shadow: 0 0 0 1px rgba(0,0,0,0.08);
+    }
+    .flag-icon svg { width: 100%; height: 100%; display: block; }
+    .country-dial-code { font-size: 13px; font-weight: 500; }
+    .country-dropdown {
+      display: none;
+      position: absolute;
+      top: calc(100% + 4px);
+      left: 0;
+      min-width: 195px;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      box-shadow: 0 6px 24px rgba(0,0,0,0.10);
+      z-index: 200;
+      overflow: hidden;
+    }
+    .country-dropdown.open { display: block; }
+    .country-option {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      padding: 9px 14px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: var(--font-body);
+      font-size: 14px;
+      color: var(--text);
+      text-align: left;
+      transition: background 0.12s;
+    }
+    .country-option:hover { background: var(--ice); }
+    .country-option.selected { background: #edf6fc; color: var(--blue); font-weight: 600; }
+    .country-option-name { flex: 1; }
+    .country-option-dial { color: #999; font-size: 12px; }
+    .phone-input-wrap input[type="tel"] {
+      border: none !important;
+      border-radius: 0 5px 5px 0;
+      flex: 1;
+      min-width: 0;
+      background: transparent;
+      padding: 11px 14px;
+      font-family: var(--font-body);
+      font-size: 15px;
+      color: var(--text);
+      outline: none;
+    }
+    .phone-input-wrap input[type="tel"]:focus { border-color: transparent !important; }
+    .form-submit {
+      width: 100%;
+      font-family: var(--font-body);
+      font-size: 15px;
+      font-weight: 700;
+      padding: 14px;
+      background: var(--navy);
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .form-submit:hover { background: #1c3672; }
+    .form-submit:active { transform: scale(0.99); }
+
+    /* ── Footer ────────────────────────────────────────────── */
+    footer {
+      background: var(--navy);
+      padding: 56px 0 32px;
+    }
+    .footer-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding-bottom: 40px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      margin-bottom: 32px;
+    }
+    .footer-brand img { height: 72px; width: auto; filter: brightness(0) invert(1); margin-bottom: 16px; }
+    .footer-brand p {
+      font-size: 13px;
+      color: rgba(255,255,255,0.4);
+      max-width: 240px;
+      line-height: 1.6;
+    }
+    .footer-links h4 {
+      font-family: var(--font-head);
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.3);
+      margin-bottom: 16px;
+    }
+    .footer-links ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .footer-links a {
+      font-size: 14px;
+      color: rgba(255,255,255,0.6);
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: #fff; }
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .footer-bottom p {
+      font-size: 13px;
+      color: rgba(255,255,255,0.3);
+    }
+    .footer-copy span { color: var(--blue-lt); }
+
+    /* ── Service picker ───────────────────────────────────── */
+    .service-picker-trigger {
+      width: 100%;
+      font-family: var(--font-body);
+      font-size: 15px;
+      color: var(--muted);
+      background: var(--canvas);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 11px 14px;
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: border-color 0.2s;
+    }
+    .service-picker-trigger:hover,
+    .service-picker-trigger:focus { border-color: var(--blue); outline: none; }
+    .service-picker-trigger.has-value { color: var(--text); }
+
+    .sp-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 300;
+      background: rgba(18,38,79,0.5);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .sp-overlay.open { display: flex; }
+
+    .sp-modal {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      max-width: 640px;
+      width: 100%;
+      padding: 40px;
+      position: relative;
+    }
+    .sp-modal-head {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .sp-modal-logo { height: 40px; width: auto; }
+    .sp-modal-head h3 {
+      font-family: var(--font-head);
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--navy);
+      letter-spacing: -0.01em;
+    }
+    .sp-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 32px;
+      height: 32px;
+      background: var(--canvas);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      color: var(--muted);
+      transition: color 0.2s, background 0.2s;
+      line-height: 1;
+    }
+    .sp-close:hover { color: var(--navy); background: var(--ice); }
+
+    .sp-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .sp-option {
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      padding: 24px 20px;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s, transform 0.15s;
+      background: var(--canvas);
+      text-align: left;
+    }
+    .sp-option:hover {
+      border-color: var(--blue);
+      background: var(--ice);
+      transform: translateY(-1px);
+    }
+    .sp-option.selected {
+      border-color: var(--blue);
+      background: var(--ice);
+    }
+    .sp-option-icon {
+      width: 44px;
+      height: 44px;
+      background: rgba(26,139,194,0.1);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 14px;
+    }
+    .sp-option-icon svg { color: var(--blue); }
+    .sp-option-title {
+      font-family: var(--font-head);
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--navy);
+      margin-bottom: 4px;
+      letter-spacing: -0.01em;
+    }
+    .sp-option-desc {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+    .sp-confirm {
+      margin-top: 20px;
+      width: 100%;
+      font-family: var(--font-body);
+      font-size: 15px;
+      font-weight: 700;
+      padding: 13px;
+      background: var(--navy);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+      opacity: 0.4;
+      pointer-events: none;
+    }
+    .sp-confirm.active { opacity: 1; pointer-events: auto; }
+    .sp-confirm.active:hover { background: #1c3672; }
+    .sp-confirm.active:active { transform: scale(0.99); }
+
+    @media (max-width: 520px) {
+      .sp-grid { grid-template-columns: 1fr; }
+      .sp-modal { padding: 28px 20px; }
+    }
+
+    /* ── Divider ───────────────────────────────────────────── */
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin: 0;
+    }
+
+    /* ── Mentions légales modal ────────────────────────────── */
+    .ml-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      background: rgba(18,38,79,0.55);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .ml-overlay.open { display: flex; }
+    .ml-modal {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      max-width: 720px;
+      width: 100%;
+      max-height: 85vh;
+      overflow-y: auto;
+      padding: 48px;
+      position: relative;
+    }
+    .ml-modal h2 {
+      font-family: var(--font-head);
+      font-size: 36px;
+      font-weight: 800;
+      color: var(--navy);
+      letter-spacing: -0.01em;
+      margin-bottom: 32px;
+    }
+    .ml-modal h3 {
+      font-family: var(--font-head);
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--navy);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin: 28px 0 8px;
+    }
+    .ml-modal p, .ml-modal address {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.7;
+      font-style: normal;
+    }
+    .ml-modal a { color: var(--blue); }
+    .ml-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 32px;
+      height: 32px;
+      background: var(--canvas);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      color: var(--muted);
+      transition: color 0.2s, background 0.2s;
+      line-height: 1;
+    }
+    .ml-close:hover { color: var(--navy); background: var(--ice); }
+    .ml-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 20px 0;
+    }
+
+    /* ── Footer contact column ─────────────────────────────── */
+    .footer-contact-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      color: rgba(255,255,255,0.6);
+    }
+    .footer-contact-item svg { color: var(--blue-lt); flex-shrink: 0; }
+
+    /* ── Form toast ───────────────────────────────────────────── */
+    .form-toast {
+      position: fixed;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: var(--navy);
+      color: #fff;
+      padding: 14px 24px;
+      border-radius: 8px;
+      font-family: var(--font-body);
+      font-size: 15px;
+      font-weight: 600;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s, transform 0.3s;
+      z-index: 500;
+      max-width: 480px;
+      text-align: center;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    }
+    .form-toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+    .form-toast.success { background: #166534; }
+    .form-toast.error   { background: #991b1b; }
+
+    /* ── Mobile nav ────────────────────────────────────────── */
+    .nav-hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 5px;
+      width: 36px;
+      height: 36px;
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      cursor: pointer;
+      padding: 4px;
+      flex-shrink: 0;
+    }
+    .nav-hamburger span {
+      display: block;
+      width: 18px;
+      height: 1.5px;
+      background: var(--navy);
+      border-radius: 2px;
+      transition: transform 0.25s, opacity 0.25s;
+    }
+    .nav-hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    .nav-hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .nav-hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+    .nav-mobile {
+      display: none;
+      position: fixed;
+      top: 64px;
+      left: 0;
+      right: 0;
+      background: rgba(251,251,250,0.97);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      z-index: 98;
+      opacity: 0;
+      transform: translateY(-6px);
+      transition: opacity 0.2s, transform 0.2s;
+      pointer-events: none;
+    }
+    .nav-mobile.open { opacity: 1; transform: none; pointer-events: auto; }
+    .nav-mobile-links {
+      list-style: none;
+      padding: 20px 0 16px;
+      display: flex;
+      flex-direction: column;
+    }
+    .nav-mobile-links li a {
+      display: block;
+      padding: 12px 0;
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--navy);
+      border-bottom: 1px solid var(--border);
+      transition: color 0.15s;
+    }
+    .nav-mobile-links li:last-child a { border-bottom: none; }
+    .nav-mobile-links a:hover { color: var(--blue); }
+    .nav-mobile-cta { display: block; text-align: center; margin: 16px 0 24px; }
+
+    /* ── Responsive ────────────────────────────────────────── */
+    @media (max-width: 900px) {
+      .nav-inner { height: 64px; }
+      .nav-logo img { height: 50px; }
+      .nav-links, .nav-cta { display: none; }
+      .nav-hamburger { display: flex; }
+      .nav-mobile { display: block; }
+      .hero { padding-top: 64px; }
+      .services-grid,
+      .zone-inner,
+      .contact-inner { grid-template-columns: 1fr; gap: 40px; }
+      .gallery-grid { grid-template-columns: 1fr 1fr; }
+      .gallery-item:nth-child(1),
+      .gallery-item:nth-child(5) { grid-column: span 1; }
+      .why-grid { grid-template-columns: 1fr 1fr; }
+      .testimonials-grid { grid-template-columns: 1fr 1fr; }
+      .hero-stats { gap: 24px; flex-wrap: wrap; }
+      .section-head { margin-bottom: 44px; }
+      .contact-form { padding: 28px 24px; }
+      .footer-top { flex-direction: column; gap: 32px; }
+      .footer-bottom { flex-direction: column; gap: 8px; text-align: center; }
+    }
+    @media (max-width: 600px) {
+      .container { padding: 0 20px; }
+      .section { padding: 72px 0; }
+      .gallery-section { padding: 72px 0; }
+      .gallery-grid { grid-template-columns: 1fr; grid-template-rows: auto; }
+      .gallery-item { height: 220px; }
+      .why-grid { grid-template-columns: 1fr 1fr; }
+      .testimonials-grid { grid-template-columns: 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+      .hero-actions { flex-direction: column; align-items: flex-start; }
+      .hero-sub { font-size: 16px; }
+      .contact-form { padding: 22px 18px; }
+      .form-toast { bottom: 20px; max-width: calc(100vw - 40px); }
+      .section-head { margin-bottom: 36px; }
+    }
+    @media (max-width: 440px) {
+      .why-grid { grid-template-columns: 1fr; }
+      .hero-stats { flex-direction: column; gap: 16px; }
+      .section { padding: 56px 0; }
+      .gallery-section { padding: 56px 0; }
+      .testimonials-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script src="js/config.js"></script>
+</head>
+<body>
+
+<div class="ambient" aria-hidden="true"></div>
+
+<!-- ── Nav ─────────────────────────────────────────────────── -->
+<nav>
+  <div class="container nav-inner">
+    <a href="#" class="nav-logo">
+      <img src="assets/images/logo_cristal_net_lorraine_simple.png" alt="Cristal Net" />
+    </a>
+    <ul class="nav-links">
+      <li><a href="#services">Services</a></li>
+      <li><a href="#galerie">Galerie</a></li>
+      <li><a href="#zone">Zone</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <a href="#contact" class="nav-cta">Demander un devis</a>
+    <button class="nav-hamburger" id="nav-hamburger" aria-label="Menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+<div class="nav-mobile" id="nav-mobile" aria-hidden="true">
+  <div class="container">
+    <ul class="nav-mobile-links">
+      <li><a href="#services">Services</a></li>
+      <li><a href="#galerie">Galerie</a></li>
+      <li><a href="#zone">Zone</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <a href="#contact" class="btn-primary nav-mobile-cta">Demander un devis</a>
+  </div>
+</div>
+
+<!-- ── Hero ────────────────────────────────────────────────── -->
+<section class="hero">
+  <div class="hero-bg">
+    <img src="https://picsum.photos/seed/vosgesmountain/1600/900" alt="" aria-hidden="true" />
+  </div>
+  <div class="container">
+    <div class="hero-content reveal">
+      <div class="hero-eyebrow">
+        <div class="hero-eyebrow-line"></div>
+        <span>Nouveau · Lancement 2026 · Lorraine</span>
+      </div>
+      <h1>Propreté<br/>cristalline,<br/><em>dès maintenant.</em></h1>
+      <p class="hero-sub">Nouveau prestataire en Lorraine — nettoyage professionnel de vitres et de panneaux solaires avec un engagement total dès la première intervention.</p>
+      <div class="hero-actions">
+        <a href="#contact" class="btn-primary">Demander un devis gratuit</a>
+        <a href="#services" class="btn-ghost">
+          Nos services
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </div>
+      <div class="hero-stats">
+        <div>
+          <div class="stat-val">2026</div>
+          <div class="stat-label">Lancement officiel<br/>en Lorraine</div>
+        </div>
+        <div>
+          <div class="stat-val">48<span>h</span></div>
+          <div class="stat-label">Délai max d'intervention<br/>sur devis accepté</div>
+        </div>
+        <div>
+          <div class="stat-val">0<span>€</span></div>
+          <div class="stat-label">Devis & déplacement<br/>sans engagement</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Services ─────────────────────────────────────────────── -->
+<section class="section" id="services">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="tag">Nos Services</span>
+      <h2>Deux expertises,<br/>une seule exigence.</h2>
+      <p>Matériel professionnel, produits écologiques, résultats visibles dès la première intervention.</p>
+    </div>
+    <div class="services-grid">
+      <div class="service-card reveal" style="--index:0; transition-delay: 0ms;">
+        <div class="service-card-img-wrap">
+          <img class="service-card-img" src="https://picsum.photos/seed/windowcleaning1/800/520" alt="Nettoyage de vitres professionnel" />
+        </div>
+        <div class="service-card-body">
+          <div class="service-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="3" width="20" height="18" rx="2"/><line x1="8" y1="3" x2="8" y2="21"/><line x1="16" y1="3" x2="16" y2="21"/>
+            </svg>
+          </div>
+          <h3>Lavage de Vitres</h3>
+          <p>Fenêtres, baies vitrées, vérandas, vitrines commerciales. Nettoyage en hauteur par nacelle ou perche télescopique.</p>
+          <ul class="service-list">
+            <li>Particuliers & professionnels</li>
+            <li>Toutes hauteurs</li>
+            <li>Produits sans traces</li>
+            <li>Intervention rapide</li>
+          </ul>
+        </div>
+      </div>
+      <div class="service-card reveal" style="--index:1; transition-delay: 80ms;">
+        <div class="service-card-img-wrap">
+          <img class="service-card-img" src="https://picsum.photos/seed/solarpanel88/800/520" alt="Nettoyage de panneaux solaires" />
+        </div>
+        <div class="service-card-body">
+          <div class="service-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+            </svg>
+          </div>
+          <h3>Panneaux Solaires</h3>
+          <p>Un panneau encrassé perd jusqu'à 30 % de rendement. Nettoyage spécialisé qui restaure la production dès le lendemain.</p>
+          <ul class="service-list">
+            <li>Audit visuel inclus</li>
+            <li>Eau osmosée pure, sans détergent</li>
+            <li>Rapport de rendement avant/après</li>
+            <li>Contrat d'entretien annuel</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ── Gallery ──────────────────────────────────────────────── -->
+<section class="gallery-section" id="galerie">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="tag">Galerie</span>
+      <h2>Le travail parle<br/>de lui-même.</h2>
+    </div>
+    <div class="gallery-grid">
+      <div class="gallery-item reveal" style="transition-delay: 0ms;">
+        <img src="https://picsum.photos/seed/glass_clean_pro/900/480" alt="Nettoyage vitre façade" />
+      </div>
+      <div class="gallery-item reveal" style="transition-delay: 80ms;">
+        <img src="https://picsum.photos/seed/solar_vosges/480/480" alt="Panneau solaire nettoyé" />
+      </div>
+      <div class="gallery-item reveal" style="transition-delay: 160ms;">
+        <img src="https://picsum.photos/seed/nacelle_work/480/480" alt="Travail en hauteur nacelle" />
+      </div>
+      <div class="gallery-item reveal" style="transition-delay: 240ms;">
+        <img src="https://picsum.photos/seed/window_pro2/480/480" alt="Vitrine commerciale" />
+      </div>
+      <div class="gallery-item reveal" style="transition-delay: 320ms;">
+        <img src="https://picsum.photos/seed/solarfarm99/900/480" alt="Ferme solaire nettoyage" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ── Pourquoi nous ─────────────────────────────────────────── -->
+<section class="section">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="tag">Pourquoi Cristal Net</span>
+      <h2>L'exigence du détail<br/>à chaque passage.</h2>
+    </div>
+    <div class="why-grid">
+      <div class="why-card reveal" style="transition-delay: 0ms;">
+        <div class="why-num">01</div>
+        <h3>Matériel Pro</h3>
+        <p>Perches télescopiques osmosées, nacelles, raclettes professionnelles. L'outillage adapté à chaque chantier.</p>
+      </div>
+      <div class="why-card reveal" style="transition-delay: 80ms;">
+        <div class="why-num">02</div>
+        <h3>Produits Éco</h3>
+        <p>Produits biodégradables, eau déminéralisée pure. Aucun résidu, aucune trace. Respect de l'environnement vosgien.</p>
+      </div>
+      <div class="why-card reveal" style="transition-delay: 160ms;">
+        <div class="why-num">03</div>
+        <h3>Devis Gratuit</h3>
+        <p>Déplacement et estimation sans engagement sous 24 h. Prix clairs, forfaits adaptés aux particuliers comme aux entreprises.</p>
+      </div>
+      <div class="why-card reveal" style="transition-delay: 240ms;">
+        <div class="why-num">04</div>
+        <h3>Assurance RC Pro</h3>
+        <p>Couverture complète pour tous les chantiers, en hauteur comme au sol. Votre tranquillité d'esprit, notre priorité.</p>
+      </div>
+      <div class="why-card reveal" style="transition-delay: 320ms;">
+        <div class="why-num">05</div>
+        <h3>Tarif Lancement</h3>
+        <p>Entreprise nouvelle = tarifs d'ouverture agressifs. Profitez des prix de lancement 2026 avant leur révision.</p>
+      </div>
+      <div class="why-card reveal" style="transition-delay: 400ms;">
+        <div class="why-num">06</div>
+        <h3>Disponibilité Totale</h3>
+        <p>Aucune liste d'attente, agenda ouvert. Intervention dès 48 h. Vous êtes prioritaire en tant que premier client.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ── Zone ─────────────────────────────────────────────────── -->
+<section class="zone-section" id="zone">
+  <div class="container">
+    <div class="zone-inner">
+      <div class="zone-map reveal">
+        <img src="https://picsum.photos/seed/vosgesmap/720/540" alt="Carte des Vosges" />
+      </div>
+      <div class="zone-content reveal" style="transition-delay: 120ms;">
+        <span class="tag">Zone d'Intervention</span>
+        <h2>Toute la Lorraine<br/>couverte.</h2>
+        <p>Basé dans les Vosges, Cristal Net Lorraine couvre l'ensemble de la région Lorraine — Vosges (88), Meurthe-et-Moselle (54), Moselle (57) et Meuse (55) — ainsi que les zones limitrophes.</p>
+        <div class="zone-tags">
+          <span class="zone-tag">Épinal</span>
+          <span class="zone-tag">Saint-Dié-des-Vosges</span>
+          <span class="zone-tag">Remiremont</span>
+          <span class="zone-tag">Gérardmer</span>
+          <span class="zone-tag">Nancy</span>
+          <span class="zone-tag">Metz</span>
+          <span class="zone-tag">Thionville</span>
+          <span class="zone-tag">Bar-le-Duc</span>
+          <span class="zone-tag">Verdun</span>
+          <span class="zone-tag">Vittel</span>
+          <span class="zone-tag">Neufchâteau</span>
+          <span class="zone-tag">Mirecourt</span>
+          <span class="zone-tag">Et alentours</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Témoignages ───────────────────────────────────────────── -->
+<section class="testimonials-section">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="tag">Lancement 2026</span>
+      <h2>Soyez parmi<br/>les premiers.</h2>
+      <p>Cristal Net Lorraine vient d'ouvrir. Les premières places sont disponibles — profitez des tarifs de lancement.</p>
+    </div>
+    <div class="testimonials-grid">
+      <div class="testimonial-card first-slot reveal" style="transition-delay: 0ms;">
+        <div class="first-slot-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+          </svg>
+        </div>
+        <div class="first-slot-label">1er client</div>
+        <div class="first-slot-sub">Place disponible — tarif lancement</div>
+      </div>
+      <div class="testimonial-card first-slot reveal" style="transition-delay: 80ms;">
+        <div class="first-slot-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+          </svg>
+        </div>
+        <div class="first-slot-label">2e client</div>
+        <div class="first-slot-sub">Place disponible — tarif lancement</div>
+      </div>
+      <div class="testimonial-card first-slot reveal" style="transition-delay: 160ms;">
+        <div class="first-slot-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+          </svg>
+        </div>
+        <div class="first-slot-label">3e client</div>
+        <div class="first-slot-sub">Place disponible — tarif lancement</div>
+      </div>
+    </div>
+    <div class="first-cta reveal" style="transition-delay: 240ms;">
+      <p>Tarifs de lancement valables pour les <strong>10 premiers clients</strong>. Devis gratuit, sans engagement.</p>
+      <a href="#contact" class="btn-primary">Réserver ma place</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── Contact ───────────────────────────────────────────────── -->
+<section class="contact-section" id="contact">
+  <div class="container">
+    <div class="contact-inner">
+      <div class="contact-info reveal">
+        <span class="tag">Contact</span>
+        <h2>Obtenez votre devis<br/>gratuit.</h2>
+        <p>Réponse sous 24 h. Déplacement sans engagement. Tarifs de lancement pour les premiers clients — profitez-en maintenant.</p>
+        <div class="contact-details">
+          <div class="contact-item">
+            <div class="contact-item-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 014.14 12a19.79 19.79 0 01-3.07-8.67A2 2 0 013.05 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L7.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/>
+              </svg>
+            </div>
+            <div>
+              <div class="contact-item-label">Téléphone</div>
+              <div class="contact-item-value">À compléter</div>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-item-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>
+              </svg>
+            </div>
+            <div>
+              <div class="contact-item-label">Email</div>
+              <div class="contact-item-value">À compléter</div>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-item-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/>
+              </svg>
+            </div>
+            <div>
+              <div class="contact-item-label">Zone</div>
+              <div class="contact-item-value">Vosges (88) & alentours</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="contact-form reveal" style="transition-delay: 120ms;">
+        <form id="devis-form" novalidate>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="fname">Prénom</label>
+              <input type="text" id="fname" placeholder="Jean" />
+            </div>
+            <div class="form-group">
+              <label for="lname">Nom</label>
+              <input type="text" id="lname" placeholder="Dupont" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" placeholder="jean.dupont@email.fr" />
+          </div>
+          <div class="form-group">
+            <label for="phone">Téléphone</label>
+            <div class="phone-input-wrap">
+              <div class="phone-country-picker" id="phone-country-picker">
+                <button type="button" class="country-trigger" id="country-trigger" aria-expanded="false" aria-haspopup="listbox">
+                  <span class="flag-icon" id="selected-flag"></span>
+                  <span class="country-dial-code" id="selected-dial">+33</span>
+                  <svg class="country-chevron" width="10" height="6" viewBox="0 0 10 6" aria-hidden="true"><path d="M0 0l5 6 5-6z" fill="currentColor"/></svg>
+                </button>
+                <div class="country-dropdown" id="country-dropdown" role="listbox"></div>
+              </div>
+              <input type="tel" id="phone" inputmode="numeric" placeholder="06 00 00 00 00" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Service souhaité</label>
+            <input type="hidden" id="service" name="service" />
+            <button type="button" class="service-picker-trigger" id="open-service-picker">
+              <span id="service-picker-label">Choisir un service…</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 12 15 18 9"/>
+              </svg>
+            </button>
+          </div>
+          <div class="form-group">
+            <label for="message">Message</label>
+            <textarea id="message" rows="4" placeholder="Décrivez votre chantier, surface approximative, accès…"></textarea>
+          </div>
+          <button type="submit" class="form-submit">Envoyer ma demande</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Footer ────────────────────────────────────────────────── -->
+<footer>
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <img src="assets/images/logo_cristal_net_lorraine_simple.png" alt="Cristal Net" />
+        <p>Nouveau prestataire en Lorraine, lancé en 2026. Vitres et panneaux solaires — matériel professionnel, tarifs de lancement.</p>
+      </div>
+      <div class="footer-links">
+        <h4>Services</h4>
+        <ul>
+          <li><a href="#services">Lavage de vitres</a></li>
+          <li><a href="#services">Panneaux solaires</a></li>
+          <li><a href="#contact">Contrat annuel</a></li>
+        </ul>
+      </div>
+      <div class="footer-links">
+        <h4>Navigation</h4>
+        <ul>
+          <li><a href="#galerie">Galerie</a></li>
+          <li><a href="#zone">Zone d'intervention</a></li>
+          <li><a href="#contact">Devis gratuit</a></li>
+          <li><a href="#" id="open-ml">Mentions légales</a></li>
+        </ul>
+      </div>
+      <div class="footer-links">
+        <h4>Contact</h4>
+        <ul>
+          <li>
+            <div class="footer-contact-item">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 014.14 12a19.79 19.79 0 01-3.07-8.67A2 2 0 013.05 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L7.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/>
+              </svg>
+              À compléter
+            </div>
+          </li>
+          <li>
+            <div class="footer-contact-item">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>
+              </svg>
+              À compléter
+            </div>
+          </li>
+          <li>
+            <div class="footer-contact-item">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/>
+              </svg>
+              Vosges (88)
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-copy">&copy; 2026 <span>Cristal Net Lorraine</span> — Tous droits réservés</p>
+      <p>Lorraine · Vosges (88) · PROPRETÉ · PRÉCISION · CONFIANCE</p>
+    </div>
+  </div>
+</footer>
+
+<!-- ── Service picker modal ─────────────────────────────────── -->
+<div class="sp-overlay" id="sp-overlay" role="dialog" aria-modal="true" aria-label="Choisir un service">
+  <div class="sp-modal">
+    <button class="sp-close" id="sp-close" aria-label="Fermer">&#x2715;</button>
+    <div class="sp-modal-head">
+      <img class="sp-modal-logo" src="assets/images/logo_cristal_net_lorraine_simple.png" alt="Cristal Net Lorraine" />
+    </div>
+    <div class="sp-grid">
+      <button type="button" class="sp-option" data-value="Lavage de vitres">
+        <div class="sp-option-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="3" width="20" height="18" rx="2"/><line x1="8" y1="3" x2="8" y2="21"/><line x1="16" y1="3" x2="16" y2="21"/>
+          </svg>
+        </div>
+        <div class="sp-option-title">Lavage de vitres</div>
+        <div class="sp-option-desc">Fenêtres, baies vitrées, vérandas, vitrines commerciales. Toutes hauteurs.</div>
+      </button>
+      <button type="button" class="sp-option" data-value="Nettoyage de panneaux solaires">
+        <div class="sp-option-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+          </svg>
+        </div>
+        <div class="sp-option-title">Panneaux solaires</div>
+        <div class="sp-option-desc">Nettoyage à l'eau osmosée. Restaure jusqu'à 30 % de rendement perdu.</div>
+      </button>
+      <button type="button" class="sp-option" data-value="Les deux services">
+        <div class="sp-option-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+          </svg>
+        </div>
+        <div class="sp-option-title">Les deux services</div>
+        <div class="sp-option-desc">Vitres et panneaux solaires en une seule intervention. Tarif groupé.</div>
+      </button>
+      <button type="button" class="sp-option" data-value="Contrat d'entretien annuel">
+        <div class="sp-option-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+          </svg>
+        </div>
+        <div class="sp-option-title">Contrat annuel</div>
+        <div class="sp-option-desc">Passages planifiés toute l'année. Tarifs préférentiels, priorité planning.</div>
+      </button>
+    </div>
+    <button type="button" class="sp-confirm" id="sp-confirm">Confirmer le service</button>
+  </div>
+</div>
+
+<!-- ── Mentions légales modal ───────────────────────────────── -->
+<div class="ml-overlay" id="ml-overlay" role="dialog" aria-modal="true" aria-label="Mentions légales">
+  <div class="ml-modal">
+    <button class="ml-close" id="close-ml" aria-label="Fermer">&#x2715;</button>
+    <h2>Mentions Légales</h2>
+
+    <h3>Éditeur du site</h3>
+    <address>
+      <strong>Cristal Net Lorraine</strong><br/>
+      Raison sociale : À compléter<br/>
+      Forme juridique : À compléter<br/>
+      Capital social : À compléter<br/>
+      SIRET : À compléter<br/>
+      Adresse : À compléter — Vosges (88), France<br/>
+      Téléphone : À compléter<br/>
+      Email : À compléter
+    </address>
+
+    <div class="ml-divider"></div>
+
+    <h3>Directeur de la publication</h3>
+    <p>À compléter</p>
+
+    <div class="ml-divider"></div>
+
+    <h3>Hébergement</h3>
+    <p>
+      Hébergeur : À compléter<br/>
+      Adresse : À compléter
+    </p>
+
+    <div class="ml-divider"></div>
+
+    <h3>Propriété intellectuelle</h3>
+    <p>
+      L'ensemble des contenus présents sur ce site (textes, images, logo, structure) est la propriété exclusive de Cristal Net Lorraine ou de leurs auteurs respectifs. Toute reproduction, diffusion ou utilisation sans autorisation écrite préalable est strictement interdite.
+    </p>
+
+    <div class="ml-divider"></div>
+
+    <h3>Données personnelles</h3>
+    <p>
+      Les informations recueillies via le formulaire de contact sont utilisées uniquement pour répondre à votre demande. Elles ne sont ni cédées ni vendues à des tiers. Conformément au Règlement Général sur la Protection des Données (RGPD) et à la loi Informatique et Libertés, vous disposez d'un droit d'accès, de rectification et de suppression de vos données. Pour exercer ce droit, contactez-nous à l'adresse indiquée ci-dessus.
+    </p>
+
+    <div class="ml-divider"></div>
+
+    <h3>Cookies</h3>
+    <p>Ce site n'utilise pas de cookies de suivi ou de traçage. Aucune donnée de navigation n'est collectée à des fins publicitaires.</p>
+
+    <div class="ml-divider"></div>
+
+    <h3>Responsabilité</h3>
+    <p>
+      Cristal Net Lorraine s'efforce d'assurer l'exactitude et la mise à jour des informations diffusées sur ce site. Toutefois, des erreurs ou omissions peuvent survenir. L'éditeur décline toute responsabilité pour tout dommage résultant de l'utilisation du site ou de l'impossibilité d'y accéder.
+    </p>
+
+    <div class="ml-divider"></div>
+
+    <h3>Droit applicable</h3>
+    <p>Le présent site et ses mentions légales sont soumis au droit français. Tout litige relève de la compétence exclusive des tribunaux français.</p>
+  </div>
+</div>
+
+<div id="form-toast" class="form-toast" role="alert" aria-live="polite"></div>
+
+<script>
+  // EmailJS init
+  if (typeof CRISTALNET_CONFIG !== 'undefined' && CRISTALNET_CONFIG.emailjs_public_key) {
+    emailjs.init(CRISTALNET_CONFIG.emailjs_public_key);
+  }
+
+  // Toast helper
+  function showToast(msg, type) {
+    const toast = document.getElementById('form-toast');
+    toast.textContent = msg;
+    toast.className = 'form-toast ' + type + ' show';
+    setTimeout(() => { toast.className = 'form-toast'; }, 5000);
+  }
+
+  // Scroll reveal via IntersectionObserver
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // Service picker modal
+  const spOverlay   = document.getElementById('sp-overlay');
+  const spConfirm   = document.getElementById('sp-confirm');
+  const spLabel     = document.getElementById('service-picker-label');
+  const spInput     = document.getElementById('service');
+  const spTrigger   = document.getElementById('open-service-picker');
+  let spSelected    = null;
+
+  spTrigger.addEventListener('click', () => {
+    spOverlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  });
+
+  document.getElementById('sp-close').addEventListener('click', closeSP);
+  spOverlay.addEventListener('click', e => { if (e.target === spOverlay) closeSP(); });
+
+  document.querySelectorAll('.sp-option').forEach(opt => {
+    opt.addEventListener('click', () => {
+      document.querySelectorAll('.sp-option').forEach(o => o.classList.remove('selected'));
+      opt.classList.add('selected');
+      spSelected = opt.dataset.value;
+      spConfirm.classList.add('active');
+    });
+  });
+
+  spConfirm.addEventListener('click', () => {
+    if (!spSelected) return;
+    spInput.value = spSelected;
+    spLabel.textContent = spSelected;
+    spTrigger.classList.add('has-value');
+    closeSP();
+  });
+
+  function closeSP() {
+    spOverlay.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  // Mobile nav
+  const hamburger = document.getElementById('nav-hamburger');
+  const navMobile = document.getElementById('nav-mobile');
+
+  function closeMobileNav() {
+    navMobile.classList.remove('open');
+    navMobile.setAttribute('aria-hidden', 'true');
+    hamburger.classList.remove('open');
+    hamburger.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+
+  hamburger.addEventListener('click', function() {
+    const opening = !navMobile.classList.contains('open');
+    if (opening) {
+      navMobile.classList.add('open');
+      navMobile.setAttribute('aria-hidden', 'false');
+      this.classList.add('open');
+      this.setAttribute('aria-expanded', 'true');
+      document.body.style.overflow = 'hidden';
+    } else {
+      closeMobileNav();
+    }
+  });
+
+  navMobile.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', closeMobileNav);
+  });
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      closeSP();
+      overlay.classList.remove('open');
+      closeMobileNav();
+      document.body.style.overflow = '';
+    }
+  });
+
+  // Mentions légales modal
+  const overlay = document.getElementById('ml-overlay');
+  document.getElementById('open-ml').addEventListener('click', e => {
+    e.preventDefault();
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  });
+  document.getElementById('close-ml').addEventListener('click', () => {
+    overlay.classList.remove('open');
+    document.body.style.overflow = '';
+  });
+  overlay.addEventListener('click', e => {
+    if (e.target === overlay) {
+      overlay.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+  });
+
+  // Phone number formatting + custom country picker
+  const phoneInput = document.getElementById('phone');
+  let selectedCountry = 'FR';
+
+  const phoneCountries = {
+    FR: { dial: '+33',  fmt: 'XX XX XX XX XX',  placeholder: '06 00 00 00 00', name: 'France'       },
+    BE: { dial: '+32',  fmt: 'XXX XX XX XX',     placeholder: '0XX XX XX XX',   name: 'Belgique'     },
+    LU: { dial: '+352', fmt: 'XXX XXX XXX',      placeholder: 'XXX XXX XXX',    name: 'Luxembourg'   },
+    CH: { dial: '+41',  fmt: 'XX XXX XX XX',     placeholder: '07X XXX XX XX',  name: 'Suisse'       },
+    DE: { dial: '+49',  fmt: 'XXXX XXXXXXX',     placeholder: '0XXX XXXXXXX',   name: 'Allemagne'    },
+    GB: { dial: '+44',  fmt: 'XXXXX XXXXXX',     placeholder: '07XXX XXXXXX',   name: 'Royaume-Uni'  },
+    US: { dial: '+1',   fmt: '(XXX) XXX-XXXX',   placeholder: '(555) 000-0000', name: 'États-Unis'   },
+    CA: { dial: '+1',   fmt: '(XXX) XXX-XXXX',   placeholder: '(555) 000-0000', name: 'Canada'       },
+  };
+
+  const phoneFlags = {
+    FR: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><mask id="cf-fr"><circle cx="256" cy="256" r="256" fill="#fff"/></mask><g mask="url(#cf-fr)"><path fill="#eee" d="M167 0h178l25.9 252.3L345 512H167l-29.8-253.4z"/><path fill="#0052b4" d="M0 0h167v512H0z"/><path fill="#d80027" d="M345 0h167v512H345z"/></g></svg>`,
+    BE: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><mask id="cf-be"><circle cx="256" cy="256" r="256" fill="#fff"/></mask><g mask="url(#cf-be)"><path fill="#333" d="M0 0h167l38.2 252.6L167 512H0z"/><path fill="#d80027" d="M345 0h167v512H345l-36.7-256z"/><path fill="#ffda44" d="M167 0h178v512H167z"/></g></svg>`,
+    LU: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><mask id="cf-lu"><circle cx="256" cy="256" r="256" fill="#fff"/></mask><g mask="url(#cf-lu)"><path fill="#eee" d="m0 167l253.8-19.3L512 167v178l-254.9 32.3L0 345z"/><path fill="#d80027" d="M0 0h512v167H0z"/><path fill="#338af3" d="M0 345h512v167H0z"/></g></svg>`,
+    CH: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><mask id="cf-ch"><circle cx="256" cy="256" r="256" fill="#fff"/></mask><g mask="url(#cf-ch)"><path fill="#d80027" d="M0 0h512v512H0z"/><path fill="#eee" d="M389.6 211.5h-89v-89h-89.1v89h-89v89h89v89h89v-89h89z"/></g></svg>`,
+    DE: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><mask id="cf-de"><circle cx="256" cy="256" r="256" fill="#fff"/></mask><g mask="url(#cf-de)"><path fill="#ffda44" d="m0 345l256.7-25.5L512 345v167H0z"/><path fill="#d80027" d="m0 167l255-23l257 23v178H0z"/><path fill="#333" d="M0 0h512v167H0z"/></g></svg>`,
+    GB: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><mask id="cf-gb"><circle cx="256" cy="256" r="256" fill="#fff"/></mask><g mask="url(#cf-gb)"><path fill="#eee" d="m0 0l8 22l-8 23v23l32 54l-32 54v32l32 48l-32 48v32l32 54l-32 54v68l22-8l23 8h23l54-32l54 32h32l48-32l48 32h32l54-32l54 32h68l-8-22l8-23v-23l-32-54l32-54v-32l-32-48l32-48v-32l-32-54l32-54V0l-22 8l-23-8h-23l-54 32l-54-32h-32l-48 32l-48-32h-32l-54 32L68 0z"/><path fill="#0052b4" d="M336 0v108L444 0Zm176 68L404 176h108zM0 176h108L0 68ZM68 0l108 108V0Zm108 512V404L68 512ZM0 444l108-108H0Zm512-108H404l108 108Zm-68 176L336 404v108z"/><path fill="#d80027" d="M0 0v45l131 131h45zm208 0v208H0v96h208v208h96V304h208v-96H304V0zm259 0L336 131v45L512 0zM176 336L0 512h45l131-131zm160 0l176 176v-45L381 336z"/></g></svg>`,
+    US: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><mask id="cf-us"><circle cx="256" cy="256" r="256" fill="#fff"/></mask><g mask="url(#cf-us)"><path fill="#eee" d="M256 0h256v64l-32 32l32 32v64l-32 32l32 32v64l-32 32l32 32v64l-256 32L0 448v-64l32-32l-32-32v-64z"/><path fill="#d80027" d="M224 64h288v64H224Zm0 128h288v64H256ZM0 320h512v64H0Zm0 128h512v64H0Z"/><path fill="#0052b4" d="M0 0h256v256H0Z"/><path fill="#eee" d="m187 243l57-41h-70l57 41l-22-67zm-81 0l57-41H93l57 41l-22-67zm-81 0l57-41H12l57 41l-22-67zm162-81l57-41h-70l57 41l-22-67zm-81 0l57-41H93l57 41l-22-67zm-81 0l57-41H12l57 41l-22-67Zm162-82l57-41h-70l57 41l-22-67Zm-81 0l57-41H93l57 41l-22-67zm-81 0l57-41H12l57 41l-22-67Z"/></g></svg>`,
+    CA: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><mask id="cf-ca"><circle cx="256" cy="256" r="256" fill="#fff"/></mask><g mask="url(#cf-ca)"><path fill="#d80027" d="M0 0v512h144l112-64l112 64h144V0H368L256 64L144 0Z"/><path fill="#eee" d="M144 0h224v512H144Z"/><path fill="#d80027" d="m301 289l44-22l-22-11v-22l-45 22l23-44h-23l-22-34l-22 33h-23l23 45l-45-22v22l-22 11l45 22l-12 23h45v33h22v-33h45z"/></g></svg>`,
+  };
+
+  function applyPhoneFmt(digits, fmt) {
+    const max = (fmt.match(/X/g) || []).length;
+    const d = digits.slice(0, max);
+    if (!d.length) return '';
+    let out = '', di = 0;
+    for (let fi = 0; fi < fmt.length && di <= d.length; fi++) {
+      if (fmt[fi] === 'X') { if (di < d.length) out += d[di++]; else break; }
+      else { if (di < d.length) out += fmt[fi]; }
+    }
+    return out;
+  }
+
+  function selectCountry(code) {
+    selectedCountry = code;
+    const cfg = phoneCountries[code];
+    document.getElementById('selected-flag').innerHTML = phoneFlags[code];
+    document.getElementById('selected-dial').textContent = cfg.dial;
+    phoneInput.placeholder = cfg.placeholder;
+    const digits = phoneInput.value.replace(/\D/g, '');
+    phoneInput.value = applyPhoneFmt(digits, cfg.fmt);
+    document.querySelectorAll('.country-option').forEach(b =>
+      b.classList.toggle('selected', b.dataset.value === code)
+    );
+    document.getElementById('country-dropdown').classList.remove('open');
+    document.getElementById('country-trigger').setAttribute('aria-expanded', 'false');
+  }
+
+  // Build dropdown options
+  (function() {
+    const dropdown = document.getElementById('country-dropdown');
+    Object.entries(phoneCountries).forEach(([code, cfg]) => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'country-option';
+      btn.setAttribute('role', 'option');
+      btn.dataset.value = code;
+      btn.innerHTML = `<span class="flag-icon">${phoneFlags[code]}</span><span class="country-option-name">${cfg.name}</span><span class="country-option-dial">${cfg.dial}</span>`;
+      btn.addEventListener('click', () => selectCountry(code));
+      dropdown.appendChild(btn);
+    });
+    selectCountry('FR');
+  })();
+
+  document.getElementById('country-trigger').addEventListener('click', function(e) {
+    e.stopPropagation();
+    const dd = document.getElementById('country-dropdown');
+    const open = dd.classList.toggle('open');
+    this.setAttribute('aria-expanded', open);
+  });
+
+  document.addEventListener('click', function(e) {
+    if (!document.getElementById('phone-country-picker').contains(e.target)) {
+      document.getElementById('country-dropdown').classList.remove('open');
+      document.getElementById('country-trigger').setAttribute('aria-expanded', 'false');
+    }
+  });
+
+  phoneInput.addEventListener('input', function() {
+    const digits = this.value.replace(/\D/g, '');
+    this.value = applyPhoneFmt(digits, phoneCountries[selectedCountry].fmt);
+  });
+
+  // Devis form submission
+  document.getElementById('devis-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    const fname   = document.getElementById('fname').value.trim();
+    const lname   = document.getElementById('lname').value.trim();
+    const email   = document.getElementById('email').value.trim();
+    const phoneRaw = phoneInput.value.trim();
+    const phone = phoneRaw ? `${phoneCountries[selectedCountry].dial} ${phoneRaw}` : '';
+    const service = document.getElementById('service').value;
+    const message = document.getElementById('message').value.trim();
+    const btn     = this.querySelector('.form-submit');
+
+    if (!fname || !email || !service) {
+      showToast('Veuillez renseigner votre prénom, email et service souhaité.', 'error');
+      return;
+    }
+
+    if (typeof CRISTALNET_CONFIG === 'undefined' || !CRISTALNET_CONFIG.emailjs_public_key) {
+      showToast('Configuration email manquante — contactez l\'administrateur.', 'error');
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'Envoi en cours…';
+
+    try {
+      await emailjs.send(
+        CRISTALNET_CONFIG.emailjs_service_id,
+        CRISTALNET_CONFIG.emailjs_template_id,
+        {
+          from_name:  (fname + ' ' + lname).trim(),
+          from_email: email,
+          phone:      phone  || 'Non renseigné',
+          service:    service,
+          message:    message || 'Aucun message'
+        }
+      );
+      showToast('Demande envoyée ! Nous vous répondons sous 24 h.', 'success');
+      this.reset();
+      selectCountry('FR');
+      spLabel.textContent = 'Choisir un service…';
+      spTrigger.classList.remove('has-value');
+      spSelected = null;
+      spConfirm.classList.remove('active');
+    } catch (err) {
+      showToast('Erreur lors de l\'envoi. Réessayez ou contactez-nous directement.', 'error');
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Envoyer ma demande';
+    }
+  });
+</script>
+</body>
+</html>
