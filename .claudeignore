@@ -1,0 +1,9 @@
+# Fonts (binaries, no need to read)
+fonts/
+
+# Images (binaries)
+assets/images/
+
+# OS
+.DS_Store
+Thumbs.db
